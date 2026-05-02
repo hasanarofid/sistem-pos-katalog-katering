@@ -229,7 +229,7 @@
                     <li class="nav-item"><a class="nav-link" href="#layanan">Layanan</a></li>
                     <li class="nav-item"><a class="nav-link" href="#katalog">Paket Menu</a></li>
                     <li class="nav-item"><a class="nav-link" href="#event">Galeri</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact text-success">Pesan Sekarang</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="#contact text-success">Pesan Sekarang</a></li> -->
                 </ul>
             </div>
         </div>
@@ -249,8 +249,9 @@
                     <h2 class="playfair fw-bold mb-4 text-primary">{{ $company->hero_card_title ?? 'Cita Rasa Autentik dengan Standar Kebersihan Sempurna' }}</h2>
                     <p class="text-muted mb-5 lead">{{ $company->about_us ?? 'Kami berdedikasi menyajikan hidangan lezat dengan bahan pilihan untuk setiap momen berharga Anda.' }}</p>
                     <div class="d-flex gap-3">
-                        <a href="#katalog" class="btn btn-gold shadow-sm">Jelajahi Paket Menu</a>
-                        <a href="#contact" class="btn btn-outline-purple rounded-pill px-4 py-3 fw-bold">Hubungi Kami</a>
+                        <a href="#katalog" class="btn btn-outline-purple rounded-pill px-4 py-3 fw-bold">Jelajahi Paket Menu</a>
+                        <a href="#event" class="btn btn-purple rounded-pill px-4 py-3 fw-bold shadow">Jelajahi Event Kami</a>
+                        <!-- <a href="#contact" class="btn btn-outline-purple rounded-pill px-4 py-3 fw-bold">Hubungi Kami</a> -->
                     </div>
                     <style>
                         .btn-outline-purple { border: 2px solid var(--primary); color: var(--primary); transition: 0.3s; border-radius: 50px; padding: 15px 40px; display: inline-block; text-decoration: none; }
