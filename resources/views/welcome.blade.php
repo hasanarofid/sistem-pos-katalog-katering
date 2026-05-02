@@ -3,8 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $company->company_name ?? 'Nita Jaya Catering' }} - Profesional & Lezat</title>
-    <link rel="canonical" href="https://nitajayacatering.com{{ Request::getPathInfo() }}">
+    <title>{{ $company->seo_title ?? ($company->company_name ?? 'Nita Jaya Catering') . ' - Profesional & Lezat' }}</title>
+    <meta name="description" content="{{ $company->seo_description ?? ($company->about_us ?? 'Layanan katering profesional untuk berbagai acara Anda.') }}">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="{{ $company->seo_title ?? ($company->company_name ?? 'Nita Jaya Catering') }}">
+    <meta property="og:description" content="{{ $company->seo_description ?? ($company->about_us ?? 'Layanan katering profesional untuk berbagai acara Anda.') }}">
+    <meta property="og:image" content="{{ $company->logo ? (Str::contains($company->logo, 'images/') ? asset($company->logo) : asset('storage/'.$company->logo)) : asset('logonita.png') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="{{ $company->seo_title ?? ($company->company_name ?? 'Nita Jaya Catering') }}">
+    <meta property="twitter:description" content="{{ $company->seo_description ?? ($company->about_us ?? 'Layanan katering profesional untuk berbagai acara Anda.') }}">
+    <meta property="twitter:image" content="{{ $company->logo ? (Str::contains($company->logo, 'images/') ? asset($company->logo) : asset('storage/'.$company->logo)) : asset('logonita.png') }}">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,7 +80,7 @@
         :root {
             --primary: #6A1B9A;
             --primary-dark: #4A148C;
-            --secondary: #8bc34a;
+            --secondary: #FFB300;
             --dark: #2c3e50;
             --light: #fdfdfd;
             --success: #4CAF50;
@@ -106,8 +121,8 @@
             border: 1px solid #eee;
         }
         
-        .btn-gold { background: var(--secondary); color: var(--primary); font-weight: 700; border: none; padding: 15px 40px; border-radius: 50px; text-decoration: none; display: inline-block; transition: 0.3s; box-shadow: 0 10px 20px rgba(255,215,0,0.2); }
-        .btn-gold:hover { background: #f5c700; transform: translateY(-3px); box-shadow: 0 15px 30px rgba(255,215,0,0.4); color: var(--primary); }
+        .btn-gold { background: linear-gradient(45deg, #FFB300, #FFA000); color: #4A148C !important; font-weight: 700; border: none; padding: 15px 40px; border-radius: 50px; text-decoration: none; display: inline-block; transition: 0.3s; box-shadow: 0 10px 20px rgba(255,179,0,0.2); }
+        .btn-gold:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(255,179,0,0.4); filter: brightness(1.1); color: #4A148C; }
         
         .section-title { text-align: center; margin-bottom: 60px; }
         .section-title h2 { font-weight: 800; color: var(--primary); font-size: 2.5rem; margin-bottom: 15px; }
@@ -145,8 +160,47 @@
         
         .footer { background: var(--primary); color: white; padding: 80px 0 40px; border-radius: 100px 100px 0 0; margin-top: 100px; }
         
-        .wa-float { position: fixed; width: 65px; height: 65px; bottom: 40px; right: 40px; background-color: var(--success); color: #FFF; border-radius: 50px; text-align: center; font-size: 35px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); z-index: 1000; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; border: 3px solid white; }
-        .wa-float:hover { transform: scale(1.1); color: white; }
+        /* WhatsApp Widget Styling */
+        .wa-widget { position: fixed; bottom: 30px; right: 30px; z-index: 1000; font-family: 'Outfit', sans-serif; }
+        .wa-button { 
+            width: 65px; height: 65px; background: #25D366; color: white; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; font-size: 32px; 
+            box-shadow: 0 10px 25px rgba(37,211,102,0.3); cursor: pointer; transition: 0.3s; 
+            border: 4px solid white;
+        }
+        .wa-button:hover { transform: scale(1.1); }
+        
+        .wa-card { 
+            position: absolute; bottom: 85px; right: 0; width: 320px; background: white; 
+            border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.15); 
+            display: none; flex-direction: column; transition: 0.3s; transform: translateY(20px); opacity: 0;
+        }
+        .wa-card.active { display: flex; transform: translateY(0); opacity: 1; }
+        
+        .wa-card-header { background: #075E54; color: white; padding: 20px; position: relative; }
+        .wa-card-header h6 { margin: 0; font-weight: 700; font-size: 1.1rem; }
+        .wa-card-header p { margin: 5px 0 0; font-size: 0.8rem; opacity: 0.8; }
+        .wa-card-header .close-wa { position: absolute; top: 15px; right: 15px; cursor: pointer; opacity: 0.7; transition: 0.3s; }
+        .wa-card-header .close-wa:hover { opacity: 1; }
+        
+        .wa-card-body { padding: 20px; background: #e5ddd5; position: relative; }
+        .wa-chat-bubble { 
+            background: white; padding: 12px 15px; border-radius: 0 15px 15px 15px; 
+            font-size: 0.9rem; color: #333; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            max-width: 90%;
+        }
+        .wa-chat-bubble::before {
+            content: ''; position: absolute; left: -10px; top: 0; 
+            border-style: solid; border-width: 0 10px 10px 0; border-color: transparent white transparent transparent;
+        }
+        
+        .wa-card-footer { padding: 15px 20px; background: white; }
+        .wa-send-btn { 
+            background: #25D366; color: white; border: none; width: 100%; padding: 12px; 
+            border-radius: 50px; font-weight: 700; text-decoration: none; display: flex; 
+            align-items: center; justify-content: center; gap: 10px; transition: 0.3s;
+        }
+        .wa-send-btn:hover { background: #128C7E; transform: translateY(-2px); color: white; }
         .btn-purple { background: var(--primary); color: white; transition: 0.3s; }
         .btn-purple:hover { background: var(--primary-dark); color: white; transform: translateY(-3px); }
         
@@ -184,7 +238,7 @@
     <header id="home" class="hero-wrapper text-center">
         <div class="container">
             <h1 class="display-3 fw-bold mb-3">Selamat Datang di Portal <br><span class="text-white" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.3);">{{ $company->company_name ?? 'Nita Jaya Catering' }}</span></h1>
-            <p class="lead opacity-75 mb-0">Solusi Kuliner Terpercaya di Surabaya Sejak 2026</p>
+            <p class="lead opacity-75 mb-0">{{ $company->about_us ?? 'Solusi Kuliner Terpercaya di Surabaya Sejak 2026' }}</p>
         </div>
     </header>
 
@@ -192,19 +246,19 @@
         <div class="hero-card">
             <div class="row align-items-center">
                 <div class="col-lg-7">
-                    <h2 class="playfair fw-bold mb-4 text-primary">Cita Rasa Autentik dengan Standar Kebersihan Sempurna</h2>
+                    <h2 class="playfair fw-bold mb-4 text-primary">{{ $company->hero_card_title ?? 'Cita Rasa Autentik dengan Standar Kebersihan Sempurna' }}</h2>
                     <p class="text-muted mb-5 lead">{{ $company->about_us ?? 'Kami berdedikasi menyajikan hidangan lezat dengan bahan pilihan untuk setiap momen berharga Anda.' }}</p>
                     <div class="d-flex gap-3">
                         <a href="#katalog" class="btn btn-gold shadow-sm">Jelajahi Paket Menu</a>
                         <a href="#contact" class="btn btn-outline-purple rounded-pill px-4 py-3 fw-bold">Hubungi Kami</a>
                     </div>
                     <style>
-                        .btn-outline-purple { border: 2px solid var(--primary); color: var(--primary); transition: 0.3s; }
-                        .btn-outline-purple:hover { background: var(--primary); color: white; }
+                        .btn-outline-purple { border: 2px solid var(--primary); color: var(--primary); transition: 0.3s; border-radius: 50px; padding: 15px 40px; display: inline-block; text-decoration: none; }
+                        .btn-outline-purple:hover { background: var(--primary); color: white; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(106,27,154,0.15); }
                     </style>
                 </div>
                 <div class="col-lg-5 d-none d-lg-block">
-                    <img src="https://images.unsplash.com/photo-1547573854-74d2a71d0826?auto=format&fit=crop&w=600&q=80" class="img-fluid rounded-4 shadow" alt="Catering">
+                    <img src="{{ $company->hero_card_image ? asset('storage/'.$company->hero_card_image) : 'https://images.unsplash.com/photo-1547573854-74d2a71d0826?auto=format&fit=crop&w=600&q=80' }}" class="img-fluid rounded-4 shadow" alt="Catering" style="width: 100%; height: 350px; object-fit: cover;">
                 </div>
             </div>
         </div>
@@ -347,10 +401,48 @@
         </div>
     </footer>
 
-    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $company->phone ?? '085767113554') }}?text=Halo Nita Jaya Catering, saya ingin pesan katering..." target="_blank" class="wa-float">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <div class="wa-widget">
+        <div class="wa-card" id="waCard">
+            <div class="wa-card-header">
+                <div class="close-wa" onclick="toggleWa()"><i class="fas fa-times"></i></div>
+                <h6>WhatsApp Chat</h6>
+                <p>Typically replies within minutes</p>
+            </div>
+            <div class="wa-card-body">
+                <div class="wa-chat-bubble">
+                    {{ $company->wa_message ?? 'Halo Nita Jaya Catering, saya ingin pesan katering...' }}
+                </div>
+            </div>
+            <div class="wa-card-footer">
+                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $company->phone ?? '085767113554') }}?text={{ urlencode($company->wa_message ?? 'Halo Nita Jaya Catering, saya ingin pesan katering...') }}" target="_blank" class="wa-send-btn">
+                    <span>Send Message</span>
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+        </div>
+        <div class="wa-button" onclick="toggleWa()">
+            <i class="fab fa-whatsapp"></i>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleWa() {
+            const card = document.getElementById('waCard');
+            if (card.style.display === 'flex') {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.display = 'none';
+                }, 300);
+            } else {
+                card.style.display = 'flex';
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 10);
+            }
+        }
+    </script>
 </body>
 </html>

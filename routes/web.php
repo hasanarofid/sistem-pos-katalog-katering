@@ -19,7 +19,7 @@ Route::get('/event/{slug}', [App\Http\Controllers\Portal\LandingPageController::
 Route::get('/privacy-policy', [App\Http\Controllers\Portal\LandingPageController::class, 'privacy'])->name('privacy');
 Route::get('/sitemap.xml', [App\Http\Controllers\Portal\SitemapController::class, 'index']);
 
-Route::get('/clear-cache', function () {
+Route::get('/clear-cache2', function () {
             Artisan::call('cache:clear');
             Artisan::call('config:clear');
             Artisan::call('route:clear');

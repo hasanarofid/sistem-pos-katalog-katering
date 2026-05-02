@@ -107,6 +107,24 @@
                 showConfirmButton: false
             });
         @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: "{{ session('error') }}",
+                showConfirmButton: true
+            });
+        @endif
+
+        @if($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Kesalahan Input!',
+                html: "{!! implode('<br>', $errors->all()) !!}",
+                showConfirmButton: true
+            });
+        @endif
     </script>
     @stack('scripts')
 </body>

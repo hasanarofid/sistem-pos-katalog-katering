@@ -31,6 +31,11 @@
                                     <small class="text-muted">Gunakan format 08xx atau 62xxxx</small>
                                 </div>
                                 <div class="form-group mb-3">
+                                    <label>Pesan Otomatis WhatsApp</label>
+                                    <textarea name="wa_message" class="form-control" rows="2" placeholder="Contoh: Halo Nita Jaya Catering, saya ingin pesan katering...">{{ $setting->wa_message ?? '' }}</textarea>
+                                    <small class="text-muted">Pesan ini akan muncul secara otomatis saat pelanggan mengklik tombol WhatsApp.</small>
+                                </div>
+                                <div class="form-group mb-3">
                                     <label>Alamat Lengkap (Google Maps Friendly)</label>
                                     <textarea name="address" class="form-control" rows="3" required>{{ $setting->address ?? '' }}</textarea>
                                 </div>
@@ -59,14 +64,24 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group mb-4">
-                                    <label>Deskripsi Singkat (Slogan / About Us untuk SEO)</label>
+                                    <label>Deskripsi Singkat (Tentang Kami / About Us)</label>
                                     <textarea name="about_us" class="form-control" rows="4">{{ $setting->about_us ?? '' }}</textarea>
-                                    <small class="text-muted">Jelaskan layanan Anda secara singkat, sertakan kata kunci katering di Surabaya/Ketintang.</small>
+                                    <small class="text-muted">Jelaskan layanan Anda secara singkat, muncul di bagian bawah hero banner.</small>
                                 </div>
-                                <div class="form-group mb-4">
-                                    <label class="text-primary fw-bold"><i class="fas fa-code me-1"></i> Custom Scripts (AdSense, Analytics, Pixel)</label>
-                                    <textarea name="custom_scripts" class="form-control font-monospace" rows="6" placeholder="Masukkan kode script di sini (misal: <script>...</script>)">{{ $setting->custom_scripts ?? '' }}</textarea>
-                                    <small class="text-muted">Kode ini akan otomatis terpasang di bagian <code>&lt;head&gt;</code> pada seluruh halaman publik. Sangat berguna untuk Google AdSense, Search Console, atau Facebook Pixel.</small>
+
+                                <hr>
+                                <h6 class="text-primary fw-bold mb-3"><i class="fas fa-search me-1"></i> Optimasi SEO & Link Preview</h6>
+                                
+                                <div class="form-group mb-3">
+                                    <label>Meta Title (Judul di Google & Tab Browser)</label>
+                                    <input type="text" name="seo_title" class="form-control" value="{{ $setting->seo_title ?? '' }}" placeholder="Contoh: Nita Jaya Catering - Jasa Katering Terbaik di Surabaya">
+                                    <small class="text-muted">Rekomendasi: 50-60 karakter.</small>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label>Meta Description (Deskripsi di Google & Preview Sosmed)</label>
+                                    <textarea name="seo_description" class="form-control" rows="3" placeholder="Jelaskan secara detail layanan Anda untuk mesin pencari...">{{ $setting->seo_description ?? '' }}</textarea>
+                                    <small class="text-muted">Rekomendasi: 150-160 karakter agar tidak terpotong di hasil pencarian Google.</small>
                                 </div>
                             </div>
                         </div>
