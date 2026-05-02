@@ -113,18 +113,32 @@
         .section-title h2 { font-weight: 800; color: var(--primary); font-size: 2.5rem; margin-bottom: 15px; }
         .section-title .divider { width: 80px; height: 5px; background: var(--secondary); margin: 0 auto; border-radius: 5px; }
         
-        /* Service Cards */
-        .service-box { 
-            background: white; border-radius: 30px; padding: 40px 30px; transition: 0.3s; 
-            border: 1px solid #f0f0f0; height: 100%; text-align: center;
+        /* Service Cards Redesign */
+        .service-card { 
+            background: white; border-radius: 30px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            border: 1px solid #f0f0f0; height: 100%; overflow: hidden; position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
         }
-        .service-box:hover { transform: translateY(-10px); border-color: var(--secondary); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-        .service-icon-circle { 
-            width: 70px; height: 70px; background: #f0f2ff; color: var(--primary); 
-            border-radius: 20px; display: flex; align-items: center; justify-content: center; 
-            font-size: 28px; margin: 0 auto 25px; transition: 0.3s;
+        .service-card:hover { transform: translateY(-15px); border-color: var(--secondary); box-shadow: 0 20px 40px rgba(106, 27, 154, 0.1); }
+        
+        .service-img-container {
+            height: 200px; width: 100%; overflow: hidden; position: relative;
+            background: #f8f9fa;
         }
-        .service-box:hover .service-icon-circle { background: var(--primary); color: white; }
+        .service-img-container img {
+            width: 100%; height: 100%; object-fit: cover; transition: 0.5s;
+        }
+        .service-card:hover .service-img-container img { transform: scale(1.1); }
+        
+        .service-icon-badge { 
+            width: 60px; height: 60px; background: white; color: var(--primary); 
+            border-radius: 15px; display: flex; align-items: center; justify-content: center; 
+            font-size: 24px; position: absolute; bottom: -30px; left: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: 0.3s; z-index: 2;
+        }
+        .service-card:hover .service-icon-badge { background: var(--primary); color: white; transform: translateY(-5px); }
+        
+        .service-content { padding: 45px 30px 30px; }
         
         /* Map Styling */
         .map-wrapper { border-radius: 40px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.1); border: 10px solid white; height: 450px; }
@@ -206,12 +220,17 @@
             <div class="row g-4">
                 @foreach($services as $service)
                 <div class="col-md-4">
-                    <div class="service-box">
-                        <div class="service-icon-circle">
-                            <i class="fas fa-utensils"></i>
+                    <div class="service-card">
+                        <div class="service-img-container">
+                            <img src="{{ $service->image ? asset('storage/'.$service->image) : 'https://images.unsplash.com/photo-1547573854-74d2a71d0826?auto=format&fit=crop&w=600&q=80' }}" alt="{{ $service->title }}">
+                            <div class="service-icon-badge">
+                                <i class="fas fa-utensils"></i>
+                            </div>
                         </div>
-                        <h4 class="fw-bold mb-3">{{ $service->title }}</h4>
-                        <p class="text-muted mb-0 small">{{ $service->description }}</p>
+                        <div class="service-content">
+                            <h4 class="fw-bold mb-3 text-primary">{{ $service->title }}</h4>
+                            <p class="text-muted mb-0 small" style="line-height: 1.6;">{{ $service->description }}</p>
+                        </div>
                     </div>
                 </div>
                 @endforeach

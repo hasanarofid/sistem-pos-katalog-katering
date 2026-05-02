@@ -71,7 +71,25 @@
         .btn-wa { background: #25d366; }
         .btn-fb { background: #1877f2; }
         .btn-copy { background: #6c757d; cursor: pointer; }
+        .btn-ig { background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); }
         .btn-share:hover { transform: scale(1.1); color: white; }
+        
+        /* Modal Preview Styling */
+        .modal-backdrop.show { opacity: 0.9; backdrop-filter: blur(10px); background: rgba(0,0,0,0.4); }
+        .modal-content { background: transparent; }
+        .modal-image-preview { 
+            max-height: 85vh; width: auto; max-width: 100%; 
+            border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            transition: 0.3s;
+        }
+        .btn-close-custom {
+            position: fixed; top: 20px; right: 20px; z-index: 1060;
+            background: white; border-radius: 50%; width: 45px; height: 45px;
+            display: flex; align-items: center; justify-content: center;
+            border: none; font-size: 20px; color: #6A1B9A; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.3s;
+        }
+        .btn-close-custom:hover { transform: rotate(90deg) scale(1.1); background: #ffd700; color: #6A1B9A; }
     </style>
     {!! $company->custom_scripts ?? '' !!}
 </head>
@@ -133,8 +151,14 @@
                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ url()->current() }}" target="_blank" class="btn-share btn-fb" title="Share ke Facebook">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
+                            <a href="https://www.instagram.com/nitajayacatering" target="_blank" class="btn-share btn-ig" title="Kunjungi Instagram Kami">
+                                <i class="fab fa-instagram"></i>
+                            </a>
                             <div onclick="copyLink()" class="btn-share btn-copy" title="Salin Link">
                                 <i class="fas fa-link"></i>
+                            </div>
+                            <div onclick="smartShare()" class="btn-share bg-primary d-md-none" title="Bagikan via App">
+                                <i class="fas fa-share-nodes"></i>
                             </div>
                         </div>
                     </div>
@@ -148,12 +172,52 @@
             <p class="mb-0">&copy; 2026 {{ $company->company_name ?? 'Nita Jaya Catering' }}. Your Trusted Culinary Partner.</p>
         </div>
     </footer>
+    
+    <!-- Image Modal Preview -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <button type="button" class="btn-close-custom" data-bs-dismiss="modal" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content border-0">
+                <div class="modal-body p-0 text-center">
+                    <img src="" id="modalImage" class="modal-image-preview" alt="Preview Image">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function copyLink() {
             navigator.clipboard.writeText(window.location.href);
             alert('Link berhasil disalin ke clipboard!');
         }
+
+        function smartShare() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '{{ $event->title }} - Nita Jaya Catering',
+                    text: 'Lihat dokumentasi acara keren dari Nita Jaya Catering: {{ $event->title }}',
+                    url: window.location.href,
+                }).catch(console.error);
+            } else {
+                copyLink();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            const modalImage = document.getElementById('modalImage');
+            const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+
+            galleryItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const imgSrc = this.querySelector('img').getAttribute('src');
+                    modalImage.setAttribute('src', imgSrc);
+                    imageModal.show();
+                });
+            });
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
